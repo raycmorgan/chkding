@@ -19,6 +19,7 @@ var game = GAMES['price-guess'] = {
     
     broadcast('user-join', user.id);
     
+    user.emit('state', game.state);
     user.emit('users', game.shortUsers);
     user.emit('round', game.round);
     
@@ -42,9 +43,9 @@ var game = GAMES['price-guess'] = {
   
   removeUser: function (user) {
     user.game  = null;
-    
+     
     for (var i = 0; i < game.users.length; i++) {
-      if (user.id == game.users.id) {
+      if (user.id == game.users[i].id) {
         game.users.splice(i, 1);
         break;
       }
@@ -247,11 +248,11 @@ function updatePositionsFromGuess(actual) {
   game.round.stepGuesses.forEach(function (guess, i) {
     if (guess == 0) {
       return;
-    } 
+    }
     
     game.round.lastMove = (new Date).getTime();
     
-    var delta = Math.abs(guess - actual);
+      var delta = Math.abs(guess - actual);
     var positions = game.round.positions;
     
     if (delta < 1) {
