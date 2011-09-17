@@ -1,0 +1,22 @@
+{
+  "name": "chkding",
+  "version": "0.1.0",
+  "description": "The chkding server",
+  "keywords": [""],
+  "author": "Ray Morgan<ray@simple-apps.com>",
+  "contributors": [
+    { "name": "Ray Morgan", "email": "ray@simple-apps.com" }
+  ],
+  "dependencies": {
+    "connect": "1.5.x",
+    "mime": "1.2.x",
+    "mongoose": "2.0.x",
+    "mu2": "0.5.x",
+    "apn": "1.1.x",
+    "nodemailer": "0.2.x",
+    "socket.io": "0.8.x",
+    "async": "0.1.x"
+  },
+  "main": "index",
+  "engines": { "node": "0.4.x" }
+}
