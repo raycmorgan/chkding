@@ -50,7 +50,7 @@ var game = GAMES['price-guess'] = {
       }
     }
     
-    if (game.round.users.indexOf(user.id) != -1) {
+    if (game.round.users && game.round.users.indexOf(user.id) != -1) {
       game.round.removedUser.push(user.id);
       if (game.round.users.length - game.round.removedUser.length < 2) {
         changeStateTo('creating');
@@ -222,23 +222,25 @@ function getUsers(num) {
     });
   }
   
-  var users = [], userSet = {};
+  fisherYates(game.users);
+  var users = [game.users[0], game.users[1], game.users[2], game.users[3]];
   
-  while (users.length != num) {
-    var rand = ~~(Math.random() * game.users.length);
-    var user = null;
-    
-    for (; rand < game.users.length; rand++) {
-      user = game.users[rand];
-      
-      if (!userSet[user.id]) {
-        userSet[user.id] = true;
-        users.push({id: user.id, name: user.name});
-      }
-    }
-  }
+  return users.map(function (user) {
+    return {id: user.id, name: user.name || "anon"};
+  });
+}
+
+function fisherYates(myArray) {
+  var i = myArray.length;
+  if (i == 0) return false;
   
-  return users;
+  while (--i) {
+     var j = Math.floor(Math.random() * (i + 1));
+     var tempi = myArray[i];
+     var tempj = myArray[j];
+     myArray[i] = tempj;
+     myArray[j] = tempi;
+   }
 }
 
 function updatePositionsFromGuess(actual) {

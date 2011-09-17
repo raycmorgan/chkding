@@ -1,90 +1,299 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <style type="text/css">
-      #board {height:200px; width:90%; margin-left:5%; position:relative; border:1px solid black;}
-      #board div {height:15px; width:15px; background:green; position:absolute; left:0; -webkit-transition:left .5s ease-in-out;}
-      
-      html #u1 {background:green;  top:15px;}
-      html #u2 {background:red;    top:45px;}
-      html #u3 {background:blue;   top:75px;}
-      html #u4 {background:orange; top:105px;}
-    </style>
-  </head>
-  
-  <body>
+<head>
+<title></title>
+<link href='http://fonts.googleapis.com/css?family=Crushed' rel='stylesheet' type='text/css'>
+<style>
+
+	/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+	*/
+
+	html, body, div, span, applet, object, iframe,
+	h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+	a, abbr, acronym, address, big, cite, code,
+	del, dfn, em, img, ins, kbd, q, s, samp,
+	small, strike, strong, sub, sup, tt, var,
+	b, u, i, center,
+	dl, dt, dd, ol, ul, li,
+	fieldset, form, label, legend,
+	table, caption, tbody, tfoot, thead, tr, th, td,
+	article, aside, canvas, details, embed, 
+	figure, figcaption, footer, header, hgroup, 
+	menu, nav, output, ruby, section, summary,
+	time, mark, audio, video {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 100%;
+		font: inherit;
+		vertical-align: baseline;
+	}
+	/* HTML5 display-role reset for older browsers */
+	article, aside, details, figcaption, figure, 
+	footer, header, hgroup, menu, nav, section {
+		display: block;
+	}
+	body {
+		line-height: 1;
+	}
+	ol, ul {
+		list-style: none;
+	}
+	blockquote, q {
+		quotes: none;
+	}
+	blockquote:before, blockquote:after,
+	q:before, q:after {
+		content: '';
+		content: none;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+
+	body {background:url('img/bg.jpg') center repeat-x; color:#FFF; font-family: 'Crushed', cursive;}
+	.wrap {width:1100px; margin:auto;}
+
+	#header {height:110px; background:url('img/header.jpg') center no-repeat; background-color:#f2c12e;}
+	#header button {padding:14px 18px; font-size:18px; margin-top:30px; background-color:#000; color:#FFF; border:0; border-radius:10px; cursor:pointer;}
+	#header button:hover {background-color:#f28705;}
+
+	#main {width:1100px; margin:auto;}
+
+	#dashboard {margin:20px 0; padding:20px; background-color:#000; border-bottom:1px solid #333; font-family:Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace; font-size:11px;}
+
+	#users {float:left; width:100px;}
+	#users li {margin-top:50px; font-size:26px;}
+	.active {background-color:#f2071b; padding:6px 8px;}
+	
+	#racetrack {float:left; position:relative; height:350px; width:800px; background:url('img/track/bg.jpg'); margin:auto; box-shadow:0 0 20px rgba(0,0,0,.6);}
+	
+	.racer {-webkit-transition:left .5s ease-in-out;  }
+	#racer1 {-webkit-animation:2s jiggle infinite;}
+	#racer2 {-webkit-animation:4s jiggle infinite;}
+	#racer3 {-webkit-animation:3s jiggle infinite;}
+	#racer4 {-webkit-animation:3.4s jiggle infinite;}
+
+	#racetrack #tracks #track1 #layer1 {position:absolute; z-index:2;}
+	#racetrack #tracks #track1 #racer1 {position:absolute; top:240px; left:20px; z-index:7;}
+
+	#racetrack #tracks #track2 #layer2 {position:absolute; z-index:4;}
+	#racetrack #tracks #track2 #racer2 {position:absolute; top:180px; left:6px; z-index:4;}
+
+	#racetrack #tracks #track3 #layer3 {position:absolute; z-index:6;}
+	#racetrack #tracks #track3 #racer3 {position:absolute; top:100px; left:14px; z-index:3;}
+
+	#racetrack #tracks #track4 #layer4 {position:absolute; z-index:8;}
+	#racetrack #tracks #track4 #racer4 {position:absolute; top:35px; left:10px; z-index:1;}
+
+	#gamearea {float:right; width:160px; margin-left:40px;}
+	#gamearea form {background-color:#000; padding:8px;}
+	#gamearea input.text {border:0; padding:8px; width:50%;}
+	#gamearea button {background-color:#000; color:#FFF; border:0; border-radius:10px; cursor:pointer;}
+	#gamearea button:hover {color:#f28705;}
+	#gamearea #current {margin-bottom:20px;}
+	#gamearea #previous {}
+	#gamearea #previous img {float:left; margin-right:10px;}
+
+	#waiting {position:fixed; bottom:0;}
+
+
+  @-webkit-keyframes jiggle {
+    0% {
+      margin:0;
+    }
     
-    <div id="board">
-      <div id="u1"></div>
-      <div id="u2"></div>
-      <div id="u3"></div>
-      <div id="u4"></div>
-    </div>
+    10% {
+      margin:4px 0 0 2px;
+    }
     
-    <h2 id="h"></h2>
+    25% {
+      margin:0 0 2px 3px;
+    }
     
-    <img src="" id="currentItem" />
+    50% {
+      margin:0 1px 0 0;
+    }
     
-    <form id="chat">
-      <input type="text" id="guess" />
-      <input type="submit" value="Send" />
-    </form>
+    75% {
+      margin:3px 2px 0 0;
+    }
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      var socket = io.connect();
+    100% {
+      margin:0;
+    }
+  }
+</style>
+
+</head>
+<body>
+	<!--header-->
+	<div id="header">
+		<div class="wrap">
+			<!-- <button>Let me play!</button> -->
+		</div>
+	</div>
+
+	<!--begin main-->
+	<div id="main">
+	
+		<!--dash-->
+		<div id="dashboard">
+			
+		</div>
+		<!--user list-->
+		<div id="users">
+			<ul>
+				<li id="user1"></li>
+				<li id="user2"></li>
+				<li id="user3"></li>
+				<li id="user4"></li>
+			</ul>
+		</div>
+		<!--the racetrack-->
+		<div id="racetrack">
+			<ul id="tracks">
+				<li id="track1">
+					<img id="layer1" src="img/track/layer1-bg.png" />
+					<img class="racer" id="racer1" src="img/racers/1.png" />
+				</li>
+				<li id="track2">
+					<img id="layer2" src="img/track/layer2-bg.png" />
+					<img class="racer" id="racer2" src="img/racers/2.png" />
+				</li>
+				<li id="track3">
+					<img id="layer3" src="img/track/layer3-bg.png" />
+					<img class="racer" id="racer3" src="img/racers/3.png" />
+				</li>
+				<li id="track4">
+					<img id="layer4" src="img/track/layer4-bg.png" />
+					<img class="racer" id="racer4" src="img/racers/4.png" />
+				</li>
+			</ul>
+		</div>
+		<!--here's where you play-->
+		<div id="gamearea">
+			<div id="current">
+				<img id="currentImage" src="#" style="width:160px; height:200px;" />
+				<form id="chat">
+					<input id="guess" type="textfield" class="text" placeholder="$">
+					<button type="submit">Enter!</button>
+				</form>
+			</div>
+			<div id="previous">
+				<img src="#" style="width:60px; height:80px;" />
+				<p>Actual price <strong>$xx.xx</strong></p>
+				<p>Winner <strong>Ray</strong></p>
+			</div>
+		</div>
+	</div>
+
+	<!--the waiting que-->
+	<div id="waiting">
+		Populate with your magic
+	</div>
+	
+	
+	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect();
+    
+    var name;
+    var ID;
+    
+    setTimeout(function () {
+       name = prompt('Input your name');
+       
+       socket.emit('name', name);
+
+       socket.on('ack-name', function (id) {
+         ID = id;
+         socket.emit('join', {gameName: 'price-guess'});
+       });
+    }, 2000);
+    
+    socket.on('state', function (state) {
       
-      var name = prompt('Input your name');
-      var ID;
       
-      socket.emit('name', name);
-      
-      socket.on('ack-name', function (id) {
-        ID = id;
-        socket.emit('join', {gameName: 'price-guess'});
-      });
-      
-      socket.on('state', function (state) {
-        $('#h').text(state);
-      });
-      
-      socket.on('next-item', function (item) {
-        document.getElementById('currentItem').src = item.image;
-      });
-      
-      socket.on('new-positions', function (positions) {
-        positions.forEach(function (pos, i) {
-          var position = Math.min((pos * 100), 100);
+      switch (state) {
+        case 'creating':
+          $('#dashboard').text("A new game is being setup...");
+          break;
           
-          $('#u' + (i+1)).css({left: position + '%'});
-        });
-      });
-      
-      socket.on('round', function (round) {
-        round.positions.forEach(function (pos, i) {
-          var position = Math.min((pos * 100), 100);
+        case 'waiting':
+          $('#dashboard').text("Waiting for another person to join...");
+          break;
+        
+        case 'starting-game':
+          $('#dashboard').text("A new game will begin very soon.");
+          break;
           
-          $('#u' + (i+1)).css({left: position + '%'});
-        });
+        case 'in-game':
+          $('#dashboard').text("Game has begun!");
+          break;
         
-        document.getElementById('currentItem').src = round.currentItem.image;
+        case 'post-game':
+          $('#dashboard').text("Game has ended. A new game will begin shortly.");
+          break;
+      }
+    });
+    
+    socket.on('next-item', function (item) {
+      $('#currentImage').attr('src', item.image);
+    });
+    
+    socket.on('new-positions', function (positions) {
+      positions.forEach(function (pos, i) {
+        var position = Math.min((pos * 100), 95);
+        
+        $('#racer' + (4-i)).css({left: position + '%'});
+      });
+    });
+    
+    socket.on('round', function (round) {
+      console.log(round)
+      
+      round.positions.forEach(function (pos, i) {
+        var position = Math.min((pos * 100), 95);
+        
+        console.log(i)
+        
+        $('#racer' + (4-i)).css({left: position + '%'});
       });
       
-      socket.on('chat', function (chat) {
+      round.userNames.forEach(function (name, i) {
+        $('#user' + (i+1)).text(name);
         
+        if (round.users[i] == ID) {
+          $('#user' + (i+1)).addClass('active');
+        } else {
+          $('#user' + (i+1)).removeClass('active');
+        }
       });
       
-      $('#chat').submit(function (e) {
-        e.preventDefault();
-        var guess = $('#guess').val();
-        
-        $('#guess').val('').focus();
-        
-        socket.emit('guess', guess);
-        
-      });
+      $('#currentImage').attr('src', round.currentItem.image);
+    });
+    
+    socket.on('chat', function (chat) {
       
-    </script>
-  </body>
+    });
+    
+    $('#chat').submit(function (e) {
+      e.preventDefault();
+      var guess = $('#guess').val();
+      
+      $('#guess').val('').focus();
+      
+      socket.emit('guess', guess);
+      
+    });
+    
+  </script>
+</body>
 </html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      #board {height:200px; width:90%; margin-left:5%; position:relative; border:1px solid black;}
+      #board div {height:15px; width:15px; background:green; position:absolute; left:0; -webkit-transition:left .5s ease-in-out;}
+      
+      html #u1 {background:green;  top:15px;}
+      html #u2 {background:red;    top:45px;}
+      html #u3 {background:blue;   top:75px;}
+      html #u4 {background:orange; top:105px;}
+    </style>
+  </head>
+  
+  <body>
+    
+    <div id="board">
+      <div id="u1"></div>
+      <div id="u2"></div>
+      <div id="u3"></div>
+      <div id="u4"></div>
+    </div>
+    
+    <h2 id="h"></h2>
+    
+    <img src="" id="currentItem" />
+    
+    <form id="chat">
+      <input type="text" id="guess" />
+      <input type="submit" value="Send" />
+    </form>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect();
+      
+      var name = prompt('Input your name');
+      var ID;
+      
+      socket.emit('name', name);
+      
+      socket.on('ack-name', function (id) {
+        ID = id;
+        socket.emit('join', {gameName: 'price-guess'});
+      });
+      
+      socket.on('state', function (state) {
+        $('#h').text(state);
+      });
+      
+      socket.on('next-item', function (item) {
+        document.getElementById('currentItem').src = item.image;
+      });
+      
+      socket.on('new-positions', function (positions) {
+        positions.forEach(function (pos, i) {
+          var position = Math.min((pos * 100), 100);
+          
+          $('#u' + (i+1)).css({left: position + '%'});
+        });
+      });
+      
+      socket.on('round', function (round) {
+        round.positions.forEach(function (pos, i) {
+          var position = Math.min((pos * 100), 100);
+          
+          $('#u' + (i+1)).css({left: position + '%'});
+        });
+        
+        document.getElementById('currentItem').src = round.currentItem.image;
+      });
+      
+      socket.on('chat', function (chat) {
+        
+      });
+      
+      $('#chat').submit(function (e) {
+        e.preventDefault();
+        var guess = $('#guess').val();
+        
+        $('#guess').val('').focus();
+        
+        socket.emit('guess', guess);
+        
+      });
+      
+    </script>
+  </body>
+</html>
