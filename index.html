@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+<title></title>
+<link href='http://fonts.googleapis.com/css?family=Crushed' rel='stylesheet' type='text/css'>
+<style>
+
+	/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+	*/
+
+	html, body, div, span, applet, object, iframe,
+	h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+	a, abbr, acronym, address, big, cite, code,
+	del, dfn, em, img, ins, kbd, q, s, samp,
+	small, strike, strong, sub, sup, tt, var,
+	b, u, i, center,
+	dl, dt, dd, ol, ul, li,
+	fieldset, form, label, legend,
+	table, caption, tbody, tfoot, thead, tr, th, td,
+	article, aside, canvas, details, embed, 
+	figure, figcaption, footer, header, hgroup, 
+	menu, nav, output, ruby, section, summary,
+	time, mark, audio, video {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 100%;
+		font: inherit;
+		vertical-align: baseline;
+	}
+	/* HTML5 display-role reset for older browsers */
+	article, aside, details, figcaption, figure, 
+	footer, header, hgroup, menu, nav, section {
+		display: block;
+	}
+	body {
+		line-height: 1;
+	}
+	ol, ul {
+		list-style: none;
+	}
+	blockquote, q {
+		quotes: none;
+	}
+	blockquote:before, blockquote:after,
+	q:before, q:after {
+		content: '';
+		content: none;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+
+	body {background:url('img/bg.jpg') center repeat-x; color:#FFF; font-family: 'Crushed', cursive;}
+	.wrap {width:1100px; margin:auto;}
+
+	#header {height:110px; background:url('img/header.jpg') center no-repeat; background-color:#f2c12e;}
+	#header button {padding:14px 18px; font-size:18px; margin-top:30px; background-color:#000; color:#FFF; border:0; border-radius:10px; cursor:pointer;}
+	#header button:hover {background-color:#f28705;}
+
+	#main {width:1100px; margin:auto;}
+
+	#dashboard {margin:20px 0; padding:20px; background-color:#000; border-bottom:1px solid #333; font-family:Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace; font-size:11px;}
+
+	#users {float:left; width:100px;}
+	#users li {margin-top:50px; font-size:26px;}
+	.active {background-color:#f2071b; padding:6px 8px;}
+	
+	#racetrack {float:left; position:relative; height:350px; width:800px; background:url('img/track/bg.jpg'); margin:auto; box-shadow:0 0 20px rgba(0,0,0,.6);}
+
+	#racetrack #tracks #track1 #layer1 {position:absolute; z-index:2;}
+	#racetrack #tracks #track1 #racer1 {position:absolute; top:240px; left:20px; z-index:7;}
+
+	#racetrack #tracks #track2 #layer2 {position:absolute; z-index:4;}
+	#racetrack #tracks #track2 #racer2 {position:absolute; top:180px; left:6px; z-index:4;}
+
+	#racetrack #tracks #track3 #layer3 {position:absolute; z-index:6;}
+	#racetrack #tracks #track3 #racer3 {position:absolute; top:100px; left:14px; z-index:3;}
+
+	#racetrack #tracks #track4 #layer4 {position:absolute; z-index:8;}
+	#racetrack #tracks #track4 #racer4 {position:absolute; top:35px; left:10px; z-index:1;}
+
+	#gamearea {float:right; width:160px; margin-left:40px;}
+	#gamearea form {background-color:#000; padding:8px;}
+	#gamearea input.text {border:0; padding:8px; width:50%;}
+	#gamearea button {background-color:#000; color:#FFF; border:0; border-radius:10px; cursor:pointer;}
+	#gamearea button:hover {color:#f28705;}
+	#gamearea #current {margin-bottom:20px;}
+	#gamearea #previous {}
+	#gamearea #previous img {float:left; margin-right:10px;}
+
+	#waiting {position:fixed; bottom:0;}
+
+</style>
+
+</head>
+<body>
+	<!--header-->
+	<div id="header">
+		<div class="wrap">
+			<!-- <button>Let me play!</button> -->
+		</div>
+	</div>
+
+	<!--begin main-->
+	<div id="main">
+	
+		<!--dash-->
+		<div id="dashboard">
+			This is all my dashboard junk. It'll show all the game states.
+		</div>
+		<!--user list-->
+		<div id="users">
+			<ul>
+				<li id="user1" class="active">Alex</li>
+				<li id="user2">Dylan</li>
+				<li id="user3">Ray</li>
+				<li id="user4">Tony</li>
+			</ul>
+		</div>
+		<!--the racetrack-->
+		<div id="racetrack">
+			<ul id="tracks">
+				<li id="track1">
+					<img id="layer1" src="img/track/layer1-bg.png" />
+					<img id="racer1" src="img/racers/1.png" />
+				</li>
+				<li id="track2">
+					<img id="layer2" src="img/track/layer2-bg.png" />
+					<img id="racer2" src="img/racers/2.png" />
+				</li>
+				<li id="track3">
+					<img id="layer3" src="img/track/layer3-bg.png" />
+					<img id="racer3" src="img/racers/3.png" />
+				</li>
+				<li id="track4">
+					<img id="layer4" src="img/track/layer4-bg.png" />
+					<img id="racer4" src="img/racers/4.png" />
+				</li>
+			</ul>
+		</div>
+		<!--here's where you play-->
+		<div id="gamearea">
+			<div id="current">
+				<img src="#" style="width:160px; height:200px;" />
+				<form>
+					<input type="textfield" class="text" placeholder="$">
+					<button>Enter!</button>
+				</form>
+			</div>
+			<div id="previous">
+				<img src="#" style="width:60px; height:80px;" />
+				<p>Actual price <strong>$xx.xx</strong></p>
+				<p>Winner <strong>Ray</strong></p>
+			</div>
+		</div>
+	</div>
+
+	<!--the waiting que-->
+	<div id="waiting">
+		Populate with your magic
+	</div>
+</body>
+</html>
