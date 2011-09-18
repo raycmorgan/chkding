@@ -33,3 +33,9 @@ io.sockets.on('connection', function (socket) {
 
 // Require games
 require('./games/price_guess');
+
+
+process.on('uncaughtException', function (err) {
+  console.log('Error: ');
+  console.log(err);
+});

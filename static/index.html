@@ -100,6 +100,38 @@
 
 	#waiting {position:fixed; bottom:0;}
 
+  #splashImage {display:none; width:311px; height:311px; position:absolute; left:38%; top:30%; border:none; z-index:10000}
+  #splashImage.animate {-webkit-animation:1.5s zoom 1;}
+  
+  #silhouettes {position:absolute; bottom:0; width:100%;}
+  #silhouettes img {display:block; position:absolute; bottom:0; left:0; width:100px; z-index:999}
+  
+  #chatbox {position:absolute; bottom:1px; width:100%; z-index:100001;}
+  #chatbox input[type=text] {display:block; margin:0 auto; font-size:18px; width:400px;}
+  
+  .bubble {position:absolute; z-index:10000; background:#fff; color:#222; border-radius:5px; width:200px; padding:10px}
+  
+  @-webkit-keyframes zoom {
+    0% {
+      -webkit-transform:scale(0.5);
+      opacity:0;
+    }
+    
+    45% {
+      -webkit-transform:scale(1);
+      opacity:1;
+    }
+    
+    55% {
+      -webkit-transform:scale(1);
+      opacity:1;
+    }
+    
+    100% {
+      -webkit-transform:scale(1.5);
+      opacity:0;
+    }
+  }
 
   @-webkit-keyframes jiggle {
     0% {
@@ -177,26 +209,35 @@
 		<!--here's where you play-->
 		<div id="gamearea">
 			<div id="current">
-				<img id="currentImage" src="#" style="width:160px; height:200px;" />
+				<img id="currentImage" src="/img/default-product.jpg" style="width:160px; height:200px;" />
 				<form id="chat">
 					<input id="guess" type="textfield" class="text" placeholder="$">
 					<button type="submit">Enter!</button>
 				</form>
 			</div>
+			<!--
 			<div id="previous">
 				<img src="#" style="width:60px; height:80px;" />
 				<p>Actual price <strong>$xx.xx</strong></p>
 				<p>Winner <strong>Ray</strong></p>
 			</div>
+			-->
 		</div>
 	</div>
+	
+  <img id="splashImage" src="/img/go.png" />
 
 	<!--the waiting que-->
 	<div id="waiting">
 		Populate with your magic
 	</div>
 	
-	
+	<div id="silhouettes">  
+  </div>
+  
+  <form id="chatbox">
+    <input type="text" placeholder="chat" value="" maxlength="100" />
+  </form>
 	
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
@@ -216,11 +257,9 @@
          ID = id;
          socket.emit('join', {gameName: 'price-guess'});
        });
-    }, 2000);
+    }, 500);
     
     socket.on('state', function (state) {
-      
-      
       switch (state) {
         case 'creating':
           $('#dashboard').text("A new game is being setup...");
@@ -232,14 +271,36 @@
         
         case 'starting-game':
           $('#dashboard').text("A new game will begin very soon.");
+          
+          setTimeout(function () {
+            $('#splashImage')
+              .attr('src', '/img/ready.png')
+              .css({opacity: 0, display: 'block'})
+              .addClass('animate');
+
+            setTimeout(function () {
+              $('#splashImage').css({display: 'none'});
+            }, 1400);
+          }, 3000);
+          
           break;
           
         case 'in-game':
           $('#dashboard').text("Game has begun!");
+          
+          $('#splashImage')
+            .attr('src', '/img/go.png')
+            .css({opacity: 0, display: 'block'})
+            .addClass('animate');
+
+          setTimeout(function () {
+            $('#splashImage').css({display: 'none'});
+          }, 1400);
           break;
         
         case 'post-game':
           $('#dashboard').text("Game has ended. A new game will begin shortly.");
+          $('#currentImage').attr('src', '/img/default-product.jpg');
           break;
       }
     });
@@ -250,20 +311,16 @@
     
     socket.on('new-positions', function (positions) {
       positions.forEach(function (pos, i) {
-        var position = Math.min((pos * 100), 95);
+        var position = Math.min((pos * 100), 93);
         
         $('#racer' + (4-i)).css({left: position + '%'});
       });
     });
     
     socket.on('round', function (round) {
-      console.log(round)
       
       round.positions.forEach(function (pos, i) {
-        var position = Math.min((pos * 100), 95);
-        
-        console.log(i)
-        
+        var position = Math.min((pos * 100), 93);
         $('#racer' + (4-i)).css({left: position + '%'});
       });
       
@@ -280,8 +337,89 @@
       $('#currentImage').attr('src', round.currentItem.image);
     });
     
-    socket.on('chat', function (chat) {
+    socket.on('winners', function (winners) {
       
+      if (winners.indexOf(ID) != -1) {
+        $('#splashImage')
+          .attr('src', '/img/winner.png')
+          .css({opacity: 0, display: 'block'})
+          .addClass('animate');
+
+        setTimeout(function () {
+          $('#splashImage').css({display: 'none'});
+        }, 1400);
+      } else {
+        if ($('#users .active').length) {
+          $('#splashImage')
+            .attr('src', '/img/loser.png')
+            .css({opacity: 0, display: 'block'})
+            .addClass('animate');
+
+          setTimeout(function () {
+            $('#splashImage').css({display: 'none'});
+          }, 1400);
+        }
+      }
+      
+    });
+    
+    socket.on('chat', function (chat) {
+      var bubble = $(document.createElement('p'))
+        .addClass('bubble')
+        .text(chat.message);
+      
+      var pos = $('#' + chat.user).offset();
+      
+      bubble.css({
+        left: Math.max(10, pos.left - 100) + 'px',
+        bottom: 120 + 'px'
+      });
+      
+      $('#silhouettes').append(bubble);
+      
+      setTimeout(function () {
+        bubble.remove();
+      }, 10000);
+    });
+    
+    socket.on('users', function (users) {
+      users.forEach(function (user) {
+        user = user.id;
+        
+        var rand = ~~(Math.random() * 9) + 1;
+        var imageName = '/img/silhouette/' + rand + '.png';
+
+        var upRand   = ~~(Math.random() * 10);
+        var leftRand = ~~(Math.random() * 85);
+
+        var img = document.createElement('img');
+        img.id = user;
+        img.src = imageName;
+        img.style.bottom = 0;
+        img.style.left   = leftRand + '%';
+
+        $('#silhouettes').append(img);
+      });
+    });
+    
+    socket.on('user-join', function (user) {
+      var rand = ~~(Math.random() * 9) + 1;
+      var imageName = '/img/silhouette/' + rand + '.png';
+      
+      var upRand   = ~~(Math.random() * 10);
+      var leftRand = ~~(Math.random() * 95);
+        
+      var img = document.createElement('img');
+      img.id = user;
+      img.src = imageName;
+      img.style.bottom = -upRand + 'px';
+      img.style.left   = leftRand + '%';
+      
+      $('#silhouettes').append(img);
+    });
+    
+    socket.on('user-left', function (user) {
+      $('#' + user).remove();
     });
     
     $('#chat').submit(function (e) {
@@ -291,7 +429,13 @@
       $('#guess').val('').focus();
       
       socket.emit('guess', guess);
-      
+    });
+    
+    $('#chatbox').submit(function (e) {
+      e.preventDefault();
+      var chat = $('#chatbox input[type=text]').val();
+      socket.emit('chat', chat);
+      $('#chatbox input[type=text]').val('');
     });
     
   </script>

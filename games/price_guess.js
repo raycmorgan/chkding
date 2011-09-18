@@ -36,8 +36,8 @@ var game = GAMES['price-guess'] = {
       }
     });
     
-    user.on('shout', function (msg) {
-      broadcast('shout', {user: user.id, message: msg});
+    user.on('chat', function (msg) {
+      broadcast('chat', {user: user.id, message: msg});
     });
   },
   
@@ -47,6 +47,7 @@ var game = GAMES['price-guess'] = {
     for (var i = 0; i < game.users.length; i++) {
       if (user.id == game.users[i].id) {
         game.users.splice(i, 1);
+        game.shortUsers.splice(i, 1);
         break;
       }
     }
