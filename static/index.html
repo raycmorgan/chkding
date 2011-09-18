@@ -69,7 +69,7 @@
 	#users li {margin-top:50px; font-size:26px;}
 	.active {background-color:#f2071b; padding:6px 8px;}
 	
-	#racetrack {float:left; position:relative; height:350px; width:800px; background:url('img/track/bg.jpg'); margin:auto; box-shadow:0 0 20px rgba(0,0,0,.6);}
+	#racetrack {float:left; position:relative; height:350px; width:800px; background:url('img/track/bg.jpg'); margin:auto; box-shadow:0 0 20px rgba(0,0,0,.6); border-bottom:1px solid #333;}
 	
 	.racer {-webkit-transition:left .5s ease-in-out;  }
 	#racer1 {-webkit-animation:2s jiggle infinite;}
@@ -90,10 +90,8 @@
 	#racetrack #tracks #track4 #racer4 {position:absolute; top:35px; left:10px; z-index:1;}
 
 	#gamearea {float:right; width:160px; margin-left:40px;}
-	#gamearea form {background-color:#000; padding:8px;}
-	#gamearea input.text {border:0; padding:8px; width:50%;}
-	#gamearea button {background-color:#000; color:#FFF; border:0; border-radius:10px; cursor:pointer;}
-	#gamearea button:hover {color:#f28705;}
+	#gamearea form {background-color:#000; padding:8px; border-bottom:1px solid #333;}
+	#gamearea input.text {width:88%; font-size:24px; border:0; padding:8px;}
 	#gamearea #current {margin-bottom:20px;}
 	#gamearea #previous {}
 	#gamearea #previous img {float:left; margin-right:10px;}
@@ -107,7 +105,7 @@
   #silhouettes img {display:block; position:absolute; bottom:0; left:0; width:100px; z-index:999}
   
   #chatbox {position:absolute; bottom:1px; width:100%; z-index:100001;}
-  #chatbox input[type=text] {display:block; margin:0 auto; font-size:18px; width:400px;}
+  #chatbox input[type=text] {display:block; margin:0 auto; font-size:12px; width:400px; border:8px solid #000;}
   
   .bubble {position:absolute; z-index:10000; background:#fff; color:#222; border-radius:5px; width:200px; padding:10px}
   
@@ -212,7 +210,6 @@
 				<img id="currentImage" src="/img/default-product.jpg" style="width:160px; height:200px;" />
 				<form id="chat">
 					<input id="guess" type="textfield" class="text" placeholder="$">
-					<button type="submit">Enter!</button>
 				</form>
 			</div>
 			<!--
@@ -229,7 +226,6 @@
 
 	<!--the waiting que-->
 	<div id="waiting">
-		Populate with your magic
 	</div>
 	
 	<div id="silhouettes">  
